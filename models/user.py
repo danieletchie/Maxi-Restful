@@ -57,9 +57,9 @@ class PlatformModel(db.Model):
     platform = db.Column(db.String(50))
     api_key = db.Column(db.String(300), unique=True)
     secret_key = db.Column(db.String(300))
-    passphrase = db.Clolumn(db.String(300))
+    passphrase = db.Column(db.String(300))
 
-    bots = db.relationship("BotModel")
+    # bots = db.relationship("BotModel")
 
     def __init__(self, user_id, platform, api_key, secret_key, passphrase):
         self.user_id = user_id
@@ -75,8 +75,8 @@ class PlatformModel(db.Model):
                 "platform": self.platform,
                 "api_key": self.api_key,
                 "secret_key": self.secret_key,
-                "passphrase": self.passphrase,
-                "bots": [bot.json() for bot in self.bots]
+                "passphrase": self.passphrase
+                # "bots": [bot.json() for bot in self.bots]
                 }
     
     @classmethod
@@ -85,7 +85,7 @@ class PlatformModel(db.Model):
 
     @classmethod
     def find_by_userId_platform(cls, user_id, platform):
-        return PlatformModel.query.filter_by(user_id = user_id,platform = platform)
+        return PlatformModel.query.filter_by(user_id = user_id,platform = platform).first()
 
     def save_to_db(self):
         db.session.add(self)

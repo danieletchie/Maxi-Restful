@@ -1,2 +1,3 @@
 PipFile
 .env
+*.db
