@@ -3,6 +3,7 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
 from db import db
+from resources.platform import NewPlatform, Platform
 from resources.user import User, UserLogin, UserRegister
 
 import os
@@ -27,6 +28,8 @@ def create_tables():
 api.add_resource(UserRegister, "/register")
 api.add_resource(UserLogin, "/login")
 api.add_resource(User, "/user/<int:_id>")
+api.add_resource(NewPlatform, "/new_platform")
+api.add_resource(Platform, "/platform/<int:id>")
 
 if __name__ == "__main__":
     db.init_app(app)

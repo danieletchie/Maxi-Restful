@@ -1,20 +1,12 @@
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 from flask_jwt_extended import jwt_required, create_access_token, create_refresh_token
-import jwt
 
-from models.user import UserModel, PlatformModel
+from models.user import UserModel
+from helper import add_parser_args
 
 __userparser__ = RequestParser()
 
-def add_parser_args(parser, args_name, args_type, args_required=False, args_help=None):
-    parser.add_argument(
-                        args_name,
-                        type=args_type,
-                        required=args_required,
-                        help=args_help
-                        )
-    
 add_parser_args(__userparser__, "name", str, True, "This field cannot be blank")
 add_parser_args(__userparser__, "email", str, True, "This field cannot be blank")
 add_parser_args(__userparser__, "phone", int, True, "This field cannot be blank")
