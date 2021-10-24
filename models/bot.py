@@ -22,6 +22,8 @@ class BotModel(db.Model):
     status = db.Column(db.String(200))
     time = db.Column(db.Float(25))
 
+    orders = db.relationship("OrderModel")
+
     def __init__(self, platform_id, pairs, strategy, current_price,sell_margin,status, time,amount,quantity, first_grid=0, grid_int=0, average_margin=0, current_margin=0,trades=0,renew=0):
         self.platform_id = platform_id
         self.pairs = pairs
@@ -56,10 +58,31 @@ class BotModel(db.Model):
                 "trades": self.trades,
                 "renew": self.renew,
                 "status": self.status,
-                "time": self.time
-                # "bots": [bot.json() for bot in self.bots]
+                "time": self.time,
+                "orders": [order.json() for order in self.orders]
                 }
-    
+
+    def me(self):
+        return {
+                "id": self.id,
+                "platform_id": self.platform_id,
+                "strategy": self.strategy,
+                "pairs": self.pairs,
+                "current_price": self.current_price,
+                "first_grid": self.first_grid,
+                "grid_int": self.grid_int,
+                "average_margin": self.average_margin,
+                "current_margin": self.current_price,
+                "amount": self.amount,
+                "quantity": self.quantity,
+                "sell_margin": self.sell_margin,
+                "trades": self.trades,
+                "renew": self.renew,
+                "status": self.status,
+                "time": self.time
+                }
+
+
     @classmethod
     def find_by_id(cls, _id):
         return cls.query.filter_by(id = _id).first()

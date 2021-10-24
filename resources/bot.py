@@ -8,7 +8,7 @@ from time import time
 
 __platform_parser__ = RequestParser()
 
-add_parser_args(__platform_parser__, "platform_id", str, True, "This field is required")
+add_parser_args(__platform_parser__, "platform_id", int, True, "This field is required")
 add_parser_args(__platform_parser__, "strategy", str, True, "This field is required")
 add_parser_args(__platform_parser__, "pairs", str, True, "This field can't be blank")
 add_parser_args(__platform_parser__, "current_price", str, True, "This field can't be blank")
@@ -29,14 +29,14 @@ class NewBot(Resource):
     def post(self):
         data = __platform_parser__.parse_args()
         data["time"] = time()
-        platform = BotModel(**data)
-        platform.save_to_db()
-        return platform.json(), 201
+        bot = BotModel(**data)
+        bot.save_to_db()
+        return bot.json(), 201
 
 class Bot(Resource):
     def get(self, id):
-        platform =  BotModel.find_by_id(id)
-        if not platform:
-            return {"message": "No platform exist with this id"},404
-        return platform.json()
+        bot =  BotModel.find_by_id(id)
+        if not bot:
+            return {"message": "No Bot exist with this id"},404
+        return bot.json()
 

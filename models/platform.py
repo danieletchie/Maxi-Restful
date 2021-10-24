@@ -29,7 +29,7 @@ class PlatformModel(db.Model):
                 "api_key": self.api_key,
                 "secret_key": self.secret_key,
                 "passphrase": self.passphrase,
-                "bots": [bot.json() for bot in self.bots]
+                "bots": [bot.me() for bot in self.bots]
                 }
                 
     def me(self):

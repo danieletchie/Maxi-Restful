@@ -3,9 +3,10 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
 from db import db
-from resources.platform import NewPlatform, Platform
 from resources.user import User, UserLogin, UserRegister
+from resources.platform import NewPlatform, Platform
 from resources.bot import NewBot, Bot
+from resources.order import NewOrder, Order
 
 import os
 from dotenv import load_dotenv
@@ -31,8 +32,10 @@ api.add_resource(UserLogin, "/login")
 api.add_resource(User, "/user/<int:_id>")
 api.add_resource(NewPlatform, "/new_platform")
 api.add_resource(Platform, "/platform/<int:id>")
-api.add_resource(Bot, "/bot/<int:id>")
 api.add_resource(NewBot, "/new_bot")
+api.add_resource(Bot, "/bot/<int:id>")
+api.add_resource(NewOrder, "/new_order")
+api.add_resource(Order, "/order/<int:_id>")
 
 if __name__ == "__main__":
     db.init_app(app)
