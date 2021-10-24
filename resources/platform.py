@@ -22,7 +22,6 @@ class NewPlatform(Resource):
             return {"message": "The user is already on this platform"},400
         elif PlatformModel.find_by_api_key(data["api_key"]):
             return {"message": "This api key is already associated with an account"},401
-        print(data)
         platform = PlatformModel(**data)
         platform.save_to_db()
         return platform.json(), 201

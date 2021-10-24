@@ -12,7 +12,7 @@ class PlatformModel(db.Model):
     secret_key = db.Column(db.String(300))
     passphrase = db.Column(db.String(300))
 
-    # bots = db.relationship("BotModel")
+    bots = db.relationship("BotModel")
 
     def __init__(self, name, user_id, api_key, secret_key, passphrase):
         self.name = name
@@ -28,10 +28,19 @@ class PlatformModel(db.Model):
                 "user_id": self.user_id,
                 "api_key": self.api_key,
                 "secret_key": self.secret_key,
-                "passphrase": self.passphrase
-                # "bots": [bot.json() for bot in self.bots]
+                "passphrase": self.passphrase,
+                "bots": [bot.json() for bot in self.bots]
                 }
-    
+                
+    def me(self):
+        return {
+                "id": self.id,
+                "name": self.name,
+                "user_id": self.user_id,
+                "api_key": self.api_key,
+                "secret_key": self.secret_key,
+                "passphrase": self.passphrase
+                }
     @classmethod
     def find_by_id(cls, _id):
         return cls.query.filter_by(id = _id).first()

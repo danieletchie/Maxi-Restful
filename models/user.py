@@ -27,7 +27,7 @@ class UserModel(db.Model):
                 "email": self.email, 
                 "phone": self.phone,
                 "status": self.status,
-                "platforms": [platform.json() for platform in self.platforms]
+                "platforms": [platform.me() for platform in self.platforms]
                 }
 
     @classmethod           
