@@ -9,7 +9,7 @@ class UserModel(db.Model):
     name = db.Column(db.String(100))
     email = db.Column(db.String(100), unique=True)
     phone = db.Column(db.BigInteger())
-    password = db.Column(db.String(250))
+    password = db.Column(db.String())
     status = db.Column(db.String(100))
     platforms = db.relationship("PlatformModel")
 

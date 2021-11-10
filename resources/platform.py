@@ -27,6 +27,7 @@ class NewPlatform(Resource):
         return platform.json(), 201
 
 class Platform(Resource):
+    @jwt_required()
     def get(self, id):
         platform = PlatformModel.find_by_id(id)
         if not platform:
