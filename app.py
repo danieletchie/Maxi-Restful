@@ -7,6 +7,7 @@ from resources.user import User, UserLogin, UserRegister
 from resources.platform import NewPlatform, Platform
 from resources.bot import NewBot, Bot
 from resources.order import NewOrder, Order
+from resources.home import Home
 
 import os
 from dotenv import load_dotenv
@@ -27,6 +28,8 @@ jwt = JWTManager(app)
 def create_tables():
     db.create_all()
 
+
+api.add_resource(Home, "/")
 api.add_resource(UserRegister, "/register")
 api.add_resource(UserLogin, "/login")
 api.add_resource(User, "/user/<int:_id>")
