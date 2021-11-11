@@ -24,6 +24,8 @@ api = Api(app)
 
 jwt = JWTManager(app)
 
+db.init_app(app)
+
 @app.before_first_request
 def create_tables():
     db.create_all()
@@ -41,7 +43,6 @@ api.add_resource(NewOrder, "/new_order")
 api.add_resource(Order, "/order/<int:_id>")
 
 if __name__ == "__main__":
-    db.init_app(app)
     app.run(host="0.0.0.0")
 
 
