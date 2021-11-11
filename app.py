@@ -40,8 +40,8 @@ api.add_resource(Bot, "/bot/<int:id>")
 api.add_resource(NewOrder, "/new_order")
 api.add_resource(Order, "/order/<int:_id>")
 
+db.init_app(app)
 if __name__ == "__main__":
-    db.init_app(app)
     app.run()
 
 
