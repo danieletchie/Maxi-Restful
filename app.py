@@ -43,6 +43,6 @@ api.add_resource(NewOrder, "/new_order")
 api.add_resource(Order, "/order/<int:_id>")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run()
 
 
