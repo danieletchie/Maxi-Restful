@@ -56,6 +56,11 @@ class PlatformModel(db.Model):
     @classmethod
     def find_by_api_key(cls, api_key):
         return cls.query.filter_by(api_key=api_key).first()
+    
+    @classmethod
+    def find_all_by_name(cls, platform):
+        platform = cls.query.filter_by(name = platform).all()
+        return platform
 
     def save_to_db(self):
         db.session.add(self)

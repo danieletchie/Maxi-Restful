@@ -51,7 +51,7 @@ class BotModel(db.Model):
                 "first_grid": self.first_grid,
                 "grid_int": self.grid_int,
                 "average_margin": self.average_margin,
-                "current_margin": self.current_price,
+                "current_margin": self.current_margin,
                 "amount": self.amount,
                 "quantity": self.quantity,
                 "sell_margin": self.sell_margin,
@@ -72,7 +72,7 @@ class BotModel(db.Model):
                 "first_grid": self.first_grid,
                 "grid_int": self.grid_int,
                 "average_margin": self.average_margin,
-                "current_margin": self.current_price,
+                "current_margin": self.current_margin,
                 "amount": self.amount,
                 "quantity": self.quantity,
                 "sell_margin": self.sell_margin,
@@ -87,6 +87,10 @@ class BotModel(db.Model):
     def find_by_id(cls, _id):
         return cls.query.filter_by(id = _id).first()
 
+    @classmethod
+    def find_all_by_platformId(cls, platform_id):
+        return cls.query.filter_by(platform_id=platform_id).all()
+        
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()

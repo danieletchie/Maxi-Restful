@@ -1,5 +1,6 @@
+from os import name
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 from flask_restful.reqparse import RequestParser
 
 from models.platform import PlatformModel
@@ -34,3 +35,20 @@ class Platform(Resource):
             return {"message": "No platform exist with this id"},404
         return platform.json()
 
+class PlatformBots(Resource):
+
+    parser = RequestParser()
+    add_parser_args(parser, "platform", str, True, "This field is required")
+
+    @jwt_required()
+    def get(self):
+        my_jwt = get_jwt()
+        if my_jwt["is_admin"]:
+            data = self.parser.parse_args()
+            all_platforms = PlatformModel.find_all_by_name(**data)
+            if not all_platforms:
+                return {"message": "No platform exist with this name"},404
+            platforms = [bot.json() for bot in all_platforms]
+            bots = [bot for bots in platforms for bot in bots["bots"] if bot["status"] == 'RUNNING']
+            return bots
+        return {"message": "Admin Privilage is required"},401

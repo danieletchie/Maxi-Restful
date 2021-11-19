@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 from flask_restful.reqparse import RequestParser
 
 from models.bot import BotModel
@@ -43,8 +43,11 @@ class Bot(Resource):
     parser.remove_argument("renew")
     parser.remove_argument("trades")
 
-    status_parser = RequestParser()
-    add_parser_args(status_parser, "status", str, True, "This field can't be blank")
+    other_parser = RequestParser()
+    add_parser_args(other_parser, "status", str)
+    add_parser_args(other_parser, "renew", int)
+    add_parser_args(other_parser, "trades", int)
+    add_parser_args(other_parser, "current_price", float)
 
     def get(self, id):
         bot =  BotModel.find_by_id(id)
@@ -56,9 +59,16 @@ class Bot(Resource):
     def patch(self, id):
         bot = BotModel.find_by_id(id)
         if not bot:
-            return {"message": "Not found"},404
-        data = self.status_parser.parse_args()
-        bot.status = data["status"]
+            return {"message": "bot not found"},404
+        data = self.other_parser.parse_args()
+        if data["status"] is not None:
+            bot.status = data["status"]
+        if data["renew"] is not None:
+            bot.renew = data["renew"]
+        if data["trades"] is not None:
+            bot.trades = data["trades"]
+        if data["current_price"] is not None:
+            bot.current_price = data["current_price"]
         bot.save_to_db()
         return {"message": "successfully updated bot"}
 
@@ -85,5 +95,24 @@ class Bot(Resource):
         bot.delete_from_db()
         return {"message": "Successfully deleted this bot"}
 
-        
 
+class BotOrders(Resource):
+
+    parser = RequestParser()
+    add_parser_args(parser, "platform_id", int, True, "This field is required")
+    add_parser_args(parser, "side", str, True, "This field is required")
+    add_parser_args(parser, "status", str, True, "This field is required")
+
+    @jwt_required()
+    def get(self):
+
+        my_jwt = get_jwt()
+        if my_jwt["is_admin"]:
+            data = self.parser.parse_args()
+            all_bots = BotModel.find_all_by_platformId(data["platform_id"])
+            if not all_bots:
+                return {"message": "No platform exist with this name"},404
+            bots = [bot.json() for bot in all_bots]
+            orders = [order for bot in bots for order in bot["orders"] if order["status"] == data["status"] and order["side"] == data["side"]]
+            return orders
+        return {"message": "Admin Privilage is required"},401
