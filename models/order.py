@@ -26,6 +26,7 @@ class OrderModel(db.Model):
                 "id": self.id,
                 "bot_id": self.bot_id,
                 "pairs": self.pairs,
+                "side": self.side,
                 "order_id": self.order_id,
                 "status": self.status,
                 "time": self.time
