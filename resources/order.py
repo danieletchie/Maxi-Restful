@@ -1,4 +1,4 @@
-from flask_jwt_extended.view_decorators import jwt_required
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 
@@ -32,15 +32,18 @@ class Order(Resource):
             return {"message": "No order exist with this id"},404
         return order.json()
 
-    @jwt_required
+    @jwt_required()
     def put(self, _id):
         order = OrderModel.find_by_id(_id)
         if not order:
             return {"message": "No order found with this id"}, 404
         data = self.parser.parse_args()
+        print(data)
         order.status = data["status"]
-        return {"message", "successfully updated this order"}
+        order.save_to_db()
+        return {"message": "successfully updated this order"}
 
+    @jwt_required()
     def delete(self, _id):
         order = OrderModel.find_by_id(_id)
         if not order:
