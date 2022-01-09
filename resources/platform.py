@@ -35,6 +35,14 @@ class Platform(Resource):
             return {"message": "No platform exist with this id"},404
         return platform.json()
 
+    @jwt_required()
+    def delete(self, id):
+        platform = PlatformModel.find_by_id(id)
+        if not platform:
+            return {"message": "No platform exist with this id"},404
+        platform.delete_from_db()
+        return {"message": "Successfully deleted"},200
+
 class PlatformBots(Resource):
 
     parser = RequestParser()
